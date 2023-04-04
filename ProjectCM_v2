@@ -155,26 +155,39 @@ Using the mean can be useful when we want to identify trends or patterns in the 
 
 # Data visualization
  
-a = melted_df.groupby('Region')['CO2Emissions'].mean()
-#print(a)
+mean_df = melted_df.groupby('Region')['CO2Emissions'].mean()
+
+# Converting the Series to a DataFrame
+mean_df = mean_df.reset_index()
+
+# Renaming the columns
+mean_df.columns = ['Region', 'CO2Emissions']
+
+
 colors_region=['Red','Blue','Green','Yellow','Purple','Orange','Brown']
-pie1=melted_df.groupby(['Region']).mean().plot(figsize=(8,8) ,kind='pie', y='CO2Emissions', autopct='%1.0f%%',
+pie1=mean_df.plot(figsize=(8,8) ,kind='pie', y='CO2Emissions', autopct='%1.0f%%',
                                 colors = colors_region,  legend = None, ylabel="", shadow=True   
                             )
-​
+
 pie1.set_title('Distribution of CO2 Emissions by Region',fontdict={'fontsize':20})
 #The highest share of CO2 emmisions are produced in North America - 36%, followed by Middle East & North Africa with 24%. Both two regions produce 60% of the world CO2 emissions.
  
-​
-a = melted_df.groupby('IncomeGroup')['CO2Emissions'].mean()
-#print(a)
-pie2=melted_df.groupby(['IncomeGroup']).mean().plot(figsize=(8,8) ,kind='pie', y='CO2Emissions', autopct='%1.0f%%',
+
+mean_df = melted_df.groupby('IncomeGroup')['CO2Emissions'].mean()
+
+# Converting the Series to a DataFrame
+mean_df = mean_df.reset_index()
+
+# Renaming the columns
+mean_df.columns = ['Region', 'CO2Emissions']
+
+pie2=mean_df.plot(figsize=(8,8) ,kind='pie', y='CO2Emissions', autopct='%1.0f%%',
                                 colors = colors_region,  legend = None, ylabel="", shadow=True  
                                 )
 pie2.set_title('Distribution of CO2 Emissions by Income Groups', fontdict={'fontsize':20})
 #The High income countries share of CO2 are 71% of worlds CO2 emissions. Low income and Lower middle income group countries are responssible for only 8% of worlds CO2 emissions.
-​
-​
+
+
 fig, ax = plt.subplots(figsize = (20,10)) 
 melted_df.groupby('Year')['CO2Emissions'].mean().plot(ax = ax, color = 'black', label = 'Worldwide')
 melted_df[melted_df['IncomeGroup'] == 'High income'].groupby('Year')['CO2Emissions'].mean().plot(ax = ax, color = 'red', label = 'High income countries')
@@ -187,63 +200,6 @@ plt.title('Dynamics of Average CO2 Emissions Over The Years', fontsize = 20)
 plt.legend(fontsize = 16)
 plt.show()
 #High income countries generates CO2 emission above the world average for whole period 1960 - 2014.
-print(melted_df_grouped.columns)
+
+
 ​
-​
-​
-/var/folders/kv/j8y1vkz93nb3t9gnklw20f5w0000gn/T/ipykernel_32827/1712029287.py:6: FutureWarning: The default value of numeric_only in DataFrameGroupBy.mean is deprecated. In a future version, numeric_only will default to False. Either specify numeric_only or select only columns which should be valid for the function.
-  pie1=melted_df.groupby(['Region']).mean().plot(figsize=(8,8) ,kind='pie', y='CO2Emissions', autopct='%1.0f%%',
----------------------------------------------------------------------------
-KeyError                                  Traceback (most recent call last)
-File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/pandas/core/indexes/base.py:3802, in Index.get_loc(self, key, method, tolerance)
-   3801 try:
--> 3802     return self._engine.get_loc(casted_key)
-   3803 except KeyError as err:
-
-File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/pandas/_libs/index.pyx:138, in pandas._libs.index.IndexEngine.get_loc()
-
-File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/pandas/_libs/index.pyx:165, in pandas._libs.index.IndexEngine.get_loc()
-
-File pandas/_libs/hashtable_class_helper.pxi:5745, in pandas._libs.hashtable.PyObjectHashTable.get_item()
-
-File pandas/_libs/hashtable_class_helper.pxi:5753, in pandas._libs.hashtable.PyObjectHashTable.get_item()
-
-KeyError: 'CO2Emissions'
-
-The above exception was the direct cause of the following exception:
-
-KeyError                                  Traceback (most recent call last)
-Cell In[15], line 6
-      4 #print(a)
-      5 colors_region=['Red','Blue','Green','Yellow','Purple','Orange','Brown']
-----> 6 pie1=melted_df.groupby(['Region']).mean().plot(figsize=(8,8) ,kind='pie', y='CO2Emissions', autopct='%1.0f%%',
-      7                                 colors = colors_region,  legend = None, ylabel="", shadow=True   
-      8                             )
-     10 pie1.set_title('Distribution of CO2 Emissions by Region',fontdict={'fontsize':20})
-     11 #The highest share of CO2 emmisions are produced in North America - 36%, followed by Middle East & North Africa with 24%. Both two regions produce 60% of the world CO2 emissions.
-
-File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/pandas/plotting/_core.py:958, in PlotAccessor.__call__(self, *args, **kwargs)
-    956                 y = data.columns[y]
-    957             # converted to series actually. copy to not modify
---> 958             data = data[y].copy()
-    959             data.index.name = y
-    960 elif isinstance(data, ABCDataFrame):
-
-File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/pandas/core/frame.py:3807, in DataFrame.__getitem__(self, key)
-   3805 if self.columns.nlevels > 1:
-   3806     return self._getitem_multilevel(key)
--> 3807 indexer = self.columns.get_loc(key)
-   3808 if is_integer(indexer):
-   3809     indexer = [indexer]
-
-File /Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/pandas/core/indexes/base.py:3804, in Index.get_loc(self, key, method, tolerance)
-   3802     return self._engine.get_loc(casted_key)
-   3803 except KeyError as err:
--> 3804     raise KeyError(key) from err
-   3805 except TypeError:
-   3806     # If we have a listlike key, _check_indexing_error will raise
-   3807     #  InvalidIndexError. Otherwise we fall through and re-raise
-   3808     #  the TypeError.
-   3809     self._check_indexing_error(key)
-
-KeyError: 'CO2Emissions'
